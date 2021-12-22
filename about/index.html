@@ -1,0 +1,310 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>About | DeMaSk</title>
+    <meta name="description" content="Protein variant impact prediction">
+    <meta name="viewport" content="width=device-width">
+    <!-- Open Graph -->
+    <meta property="og:url" content="https://demask.princeton.edu/about">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="DeMaSk: protein substitution impact prediction">
+    <meta property="og:description"  content="DeMaSk uses a simple linear model to predict the functional impact of single amino acid substitutions. It uses an interpretable, directional amino acid substitution matrix computed from deep mutational scanning datasets, as well as per-position evolutionary conservation and variant frequency computed from homologs of the query sequence.">
+    <meta property="og:image" content="https://demask.princeton.edu/images/DeMaSk_preview.png">
+    <meta name="twitter:card" content="summary">
+    <!-- end Open Graph -->
+    <!-- begin favicons -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+    <!-- end favicons -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/jquery-ui.css">
+    <link rel="stylesheet" href="/css/main.css">
+  </head>
+  <body>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="/"><img src="/images/DeMaSk.png" alt="DeMaSk" width="110px"></a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse"
+          data-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent" aria-expanded="false"
+          aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item">
+        <a class="nav-link" href="/query">Query</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="https://github.com/Singh-Lab/DeMaSk">Software</a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" href="/about">About</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<div class="container">
+
+  <h1>The DeMaSk model</h1>
+  
+  <div class="row">
+    
+    <div class="col-md-6">
+      For a sequence <i>s</i>, DeMaSk models the substitution impact as a linear combination of
+      <ol>
+        <li>
+          The Shannon entropy <i>H<sub>s,p</sub></i> of
+          position <i>p</i> as computed across homologs of
+          sequence <i>s</i>
+        </li>
+        <li>
+          The variant frequency <i>log<sub>2</sub> f<sub>s,p,var</sub></i> across homologs
+        </li>
+        <li>
+          The DMS-derived average impact for the
+          combination of wild-type and variant residue identity,
+          stored in the substitution matrix <i>D</i>.
+        </li>
+      </ol>
+      <p>
+        That is, for a substitution from residue <i>wt</i> to
+        residue <i>var</i> at position <i>p</i> in sequence <i>s</i>,
+      </p>
+      
+        <img src="DeMaSk_equation.png" class="equation"></img>
+
+      <p>
+        We use ordinary least squares regression to infer the
+        coefficients using the variant fitness scores from the datasets
+        below, along with the computed substitution matrix and the
+        homologous sequences found for each protein using blastp.
+      </p>
+      <p>
+        Once fitted, the model can be applied to any variant in a query protein by finding homologs,
+        computing the relevant position’s Shannon entropy and the frequency of the variant at that
+        position, and combining those with the appropriate substitution matrix element.
+      </p>
+
+    </div>
+
+    <div class="col-md-6">
+      <h3>The directional substitution matrix</h3>
+      as computed from the DMS datasets in the table below.
+      <svg id="matrix" width="300" height="300"></svg>
+      <a href="matrix.txt">Download</a>
+    </div>
+
+  </div>
+
+  <h2>DMS datasets used to compute the matrix</h2>
+  <p>
+    Within each selected dataset, the fitness values for all variants
+    are rank-normalized since fitness metrics are dependent on
+    experimental design.  For this reason, datasets were included only
+    from DMS studies that measured all or nearly all possible amino
+    acid substitutions in a protein so that rank-normalized scores had
+    a consistent interpretation across proteins.  The measure of
+    fitness must also be related to the protein’s function, which
+    excludes, for example, studies that measured the protein’s evasion
+    of a host’s immune system.  In cases where multiple datasets cover
+    the same protein, the datasets were merged by averaging normalized
+    fitness scores for the same variant.
+  </p>
+
+  <p>
+    <a class="btn btn-secondary btn-sm"
+       href="datasets.tsv">Download this table</a>
+    <a class="btn btn-secondary btn-sm" href="data.tsv">Download
+      all datasets</a>
+    (Or, download individually from the table below.)
+  </p>
+  
+  <table class="table table-sm table-striped">
+<thead>
+  <tr>
+    <th>Study</th>
+    <th>PMID</th>
+    <th>Protein</th>
+    <th>Species</th>
+    <th>Positions mutated</th>
+  </tr>
+</thead>
+<tbody>
+  <tr>
+    <td><a href="datasets/bloom2014.tsv">Bloom 2014</a></td>
+    <td><a href="https://pubmed.ncbi.nlm.nih.gov/24859245">24859245</a></td>
+    <td>NP</td>
+    <td>influenza (A/WSN/1933)</td>
+    <td>498</td>
+  </tr>
+  <tr>
+    <td><a href="datasets/brenan2016.tsv">Brenan et al. 2016</a></td>
+    <td><a href="https://pubmed.ncbi.nlm.nih.gov/27760319">27760319</a></td>
+    <td>MAPK1/ERK2</td>
+    <td>human</td>
+    <td>359</td>
+  </tr>
+  <tr>
+    <td><a href="datasets/doud2016.tsv">Doud and Bloom 2016</a></td>
+    <td><a href="https://pubmed.ncbi.nlm.nih.gov/27271655">27271655</a></td>
+    <td>H1 HA</td>
+    <td>influenza (A/WSN/1933)</td>
+    <td>564</td>
+  </tr>
+  <tr>
+    <td><a href="datasets/firnberg2014.tsv">Firnberg et al. 2014</a></td>
+    <td><a href="https://pubmed.ncbi.nlm.nih.gov/24567513">24567513</a></td>
+    <td>TEM-1</td>
+    <td>E. coli</td>
+    <td>286</td>
+  </tr>
+  <tr>
+    <td><a href="datasets/giacomelli2018.tsv">Giacomelli et al. 2018</a></td>
+    <td><a href="https://pubmed.ncbi.nlm.nih.gov/30224644">30224644</a></td>
+    <td>TP53</td>
+    <td>human</td>
+    <td>393</td>
+  </tr>
+  <tr>
+    <td><a href="datasets/haddox2018f.tsv">Haddox et al. 2018</a></td>
+    <td><a href="https://pubmed.ncbi.nlm.nih.gov/29590010">29590010</a></td>
+    <td>Env</td>
+    <td>HIV (BF520)</td>
+    <td>662</td>
+  </tr>
+  <tr>
+    <td><a href="datasets/haddox2018g.tsv">Haddox et al. 2018</a></td>
+    <td><a href="https://pubmed.ncbi.nlm.nih.gov/29590010">29590010</a></td>
+    <td>Env</td>
+    <td>HIV (BG505)</td>
+    <td>670</td>
+  </tr>
+  <tr>
+    <td><a href="datasets/heredia2018c.tsv">Heredia et al. 2018</a></td>
+    <td><a href="https://pubmed.ncbi.nlm.nih.gov/29678950">29678950</a></td>
+    <td>CCR5</td>
+    <td>human</td>
+    <td>351</td>
+  </tr>
+  <tr>
+    <td><a href="datasets/heredia2018x.tsv">Heredia et al. 2018</a></td>
+    <td><a href="https://pubmed.ncbi.nlm.nih.gov/29678950">29678950</a></td>
+    <td>CXCR4</td>
+    <td>human</td>
+    <td>351</td>
+  </tr>
+  <tr>
+    <td><a href="datasets/kelsic2016.tsv">Kelsic et al. 2016</a></td>
+    <td><a href="https://pubmed.ncbi.nlm.nih.gov/28009265">28009265</a></td>
+    <td>IF1</td>
+    <td>E. coli</td>
+    <td>72</td>
+  </tr>
+  <tr>
+    <td><a href="datasets/klesmith2015.tsv">Klesmith et al. 2015</a></td>
+    <td><a href="https://pubmed.ncbi.nlm.nih.gov/26369947">26369947</a></td>
+    <td>LGK</td>
+    <td>Lipomyces starkeyi (Oleaginous yeast)</td>
+    <td>439</td>
+  </tr>
+  <tr>
+    <td><a href="datasets/mavor2016.tsv">Mavor et al. 2016</a></td>
+    <td><a href="https://pubmed.ncbi.nlm.nih.gov/27111525">27111525</a></td>
+    <td>RL401</td>
+    <td>yeast</td>
+    <td>75</td>
+  </tr>
+  <tr>
+    <td><a href="datasets/melnikov2014.tsv">Melnikov et al. 2014</a></td>
+    <td><a href="https://pubmed.ncbi.nlm.nih.gov/24914046">24914046</a></td>
+    <td>APH(3')II</td>
+    <td>E. coli</td>
+    <td>264</td>
+  </tr>
+  <tr>
+    <td><a href="datasets/roscoe2013.tsv">Roscoe et al. 2013</a></td>
+    <td><a href="https://pubmed.ncbi.nlm.nih.gov/23376099">23376099</a></td>
+    <td>RL401</td>
+    <td>yeast</td>
+    <td>75</td>
+  </tr>
+  <tr>
+    <td><a href="datasets/roscoe2014.tsv">Roscoe and Bolon 2014</a></td>
+    <td><a href="https://pubmed.ncbi.nlm.nih.gov/24862281">24862281</a></td>
+    <td>RL401</td>
+    <td>yeast</td>
+    <td>75</td>
+  </tr>
+  <tr>
+    <td><a href="datasets/stiffler2015.tsv">Stiffler et al. 2015</a></td>
+    <td><a href="https://pubmed.ncbi.nlm.nih.gov/25723163">25723163</a></td>
+    <td>TEM-1</td>
+    <td>E. coli</td>
+    <td>263</td>
+  </tr>
+  <tr>
+    <td><a href="datasets/thyagarajan2014.tsv">Thyagarajan and Bloom 2014</a></td>
+    <td><a href="https://pubmed.ncbi.nlm.nih.gov/25006036">25006036</a></td>
+    <td>H1 HA</td>
+    <td>influenza</td>
+    <td>564</td>
+  </tr>
+  <tr>
+    <td><a href="datasets/weile2017c.tsv">Weile et al. 2017</a></td>
+    <td><a href="https://pubmed.ncbi.nlm.nih.gov/29269382">29269382</a></td>
+    <td>CALM1</td>
+    <td>human</td>
+    <td>149</td>
+  </tr>
+  <tr>
+    <td><a href="datasets/weile2017s.tsv">Weile et al. 2017</a></td>
+    <td><a href="https://pubmed.ncbi.nlm.nih.gov/29269382">29269382</a></td>
+    <td>SUMO1</td>
+    <td>human</td>
+    <td>101</td>
+  </tr>
+  <tr>
+    <td><a href="datasets/weile2017t.tsv">Weile et al. 2017</a></td>
+    <td><a href="https://pubmed.ncbi.nlm.nih.gov/29269382">29269382</a></td>
+    <td>TPK1</td>
+    <td>human</td>
+    <td>243</td>
+  </tr>
+  <tr>
+    <td><a href="datasets/weile2017u.tsv">Weile et al. 2017</a></td>
+    <td><a href="https://pubmed.ncbi.nlm.nih.gov/29269382">29269382</a></td>
+    <td>UBE2I</td>
+    <td>human</td>
+    <td>159</td>
+  </tr>
+  <tr>
+    <td><a href="datasets/wrenbeck2017.tsv">Wrenbeck et al. 2017</a></td>
+    <td><a href="https://pubmed.ncbi.nlm.nih.gov/28585537">28585537</a></td>
+    <td>amiE</td>
+    <td>P. aeruginosa</td>
+    <td>341</td>
+  </tr>
+</tbody>
+  </table>
+
+</div>
+
+<!-- <script src="https://d3js.org/d3.v5.min.js"></script> -->
+<script src="/scripts/d3.js"></script>
+<script src="/scripts/d3-tip.js"></script>
+
+<!-- Three scripts below for bootstrap -->
+<!-- <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script> -->
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script> -->
+<!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script> -->
+<script src="/scripts/jquery.slim.min.js"></script>
+<script src="/scripts/popper.min.js"></script>
+<script src="/scripts/bootstrap.min.js"></script>
+<script src="/scripts/about.js"></script>
+  </body>
+</html>

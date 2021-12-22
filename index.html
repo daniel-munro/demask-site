@@ -1,0 +1,134 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>DeMaSk</title>
+    <meta name="description" content="Protein variant impact prediction">
+    <meta name="viewport" content="width=device-width">
+    <!-- Open Graph -->
+    <meta property="og:url" content="https://demask.princeton.edu">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="DeMaSk: protein substitution impact prediction">
+    <meta property="og:description"  content="DeMaSk uses a simple linear model to predict the functional impact of single amino acid substitutions. It uses an interpretable, directional amino acid substitution matrix computed from deep mutational scanning datasets, as well as per-position evolutionary conservation and variant frequency computed from homologs of the query sequence.">
+    <meta property="og:image" content="https://demask.princeton.edu/images/DeMaSk_preview.png">
+    <meta name="twitter:card" content="summary">
+    <!-- end Open Graph -->
+    <!-- begin favicons -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+    <!-- end favicons -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/jquery-ui.css">
+    <link rel="stylesheet" href="/css/main.css">
+  </head>
+  <body>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="/"><img src="/images/DeMaSk.png" alt="DeMaSk" width="110px"></a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse"
+          data-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent" aria-expanded="false"
+          aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item">
+        <a class="nav-link" href="/query">Query</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="https://github.com/Singh-Lab/DeMaSk">Software</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/about">About</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<div class="container">
+
+  <div class="home-page-title">
+    <!-- <h1>DeMaSk</h1> -->
+    <img class="home-page-logo" src="/images/DeMaSk.png" alt="DeMaSk">
+    <h5>Prediction of protein substitution impact using a directional
+    substitution matrix and homolog alignments</h5>
+  </div>
+
+  <div class="row">
+    
+    <!-- <div class="col-md-6"> -->
+    <!--   <h3>View and download predictions for a protein:</h3> -->
+    <!--   <\!-- <div class="dropdown"> -\-> -->
+    <!--   <\!--   <button class="btn dropdown-toggle" type="button" -\-> -->
+    <!--   <\!--     id="dropdownMenuButton" data-toggle="dropdown" -\-> -->
+    <!--   <\!--     aria-haspopup="true" aria-expanded="false"> -\-> -->
+    <!--   <\!--     Select protein -\-> -->
+    <!--   <\!--   </button> -\-> -->
+    <!--   <\!--   <div class="dropdown-menu" id="select-prot" -\-> -->
+    <!--   <\!--        aria-labelledby="dropdownMenuButton"></div> -\-> -->
+    <!--   <\!-- </div> -\-> -->
+
+    <!--   <\!-- <input type="text" id="selector" placeholder="search"> -\-> -->
+    <!--   <label for="protInput">Enter a human Ensembl protein ID</label> -->
+    <!--   <input type="text" id="protInput" placeholder="Protein ID"> -->
+    <!--   <button class="btn btn-primary" type="button" onclick="view()"> -->
+    <!--   View -->
+    <!--   </button> -->
+      
+    <!--   <\!-- <div class="form-check"> -\-> -->
+    <!--   <\!--   <input type="checkbox" class="form-check-input" id="single-mut" -\-> -->
+    <!--   <\!--          autocomplete="off"> -\-> -->
+    <!--   <\!--   <label class="form-check-label" for="single-mut"> -\-> -->
+    <!--   <\!--     Only single-mutation variants -\-> -->
+    <!--   <\!--   </label> -\-> -->
+    <!--   <\!-- </div> -\-> -->
+        <!-- </div> -->
+
+    <div class="col-md-6">
+      <p>
+        DeMaSk uses a simple linear model to predict the functional
+        impact of single amino acid substitutions.  It uses an
+        interpretable, directional amino acid substitution matrix
+        computed from deep mutational scanning datasets, as well as
+        per-position evolutionary conservation and variant frequency computed from homologs
+        of the query sequence. <a href="/about">more</a>
+      </p>
+      <p>
+        Daniel Munro, Mona Singh (2020). DeMaSk: a deep mutational scanning substitution matrix and its use for variant impact prediction. <i>Bioinformatics</i>, btaa1030.<br>
+        <a href="https://academic.oup.com/bioinformatics/advance-article/doi/10.1093/bioinformatics/btaa1030/6039113">Read the paper.</a>
+      </p>
+      <p>
+        For questions,
+        email <a href="mailto:dmunro@scripps.edu">dmunro@scripps.edu</a> or
+        see the <a href="http://www.cs.princeton.edu/~mona/">Singh Lab
+        website</a>.
+      </p>
+    </div>
+
+    <div class="col-md-6">
+      <p>
+        <a href="/query">Enter a sequence here</a> and then view and download the computed predictions.
+      </p>
+      <p style="text-align: center;">
+        &mdash; or &mdash;
+      </p>
+      <p>
+        Install the <a href="https://github.com/Singh-Lab/DeMaSk">Python package</a> to run DeMaSk locally.
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- Three scripts below for bootstrap -->
+<script src="/scripts/jquery.slim.min.js"></script>
+<script src="/scripts/popper.min.js"></script>
+<script src="/scripts/bootstrap.min.js"></script>
+
+<script src="/scripts/jquery-ui.js"></script>
+
+<script src="/scripts/main.js"></script>
+  </body>
+</html>

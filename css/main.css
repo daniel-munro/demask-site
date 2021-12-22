@@ -1,0 +1,109 @@
+nav {
+    margin-bottom: 20px;
+    /* background-color: white; */
+}
+
+.home-page-title {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.home-page-logo {
+    width: 400px;
+    max-width: 100%;
+    margin-bottom: 10px;
+}
+
+.equation {
+    width: 100%;
+    max-width: 600px;
+    margin-bottom: 20px;
+}
+
+#matrix {
+    margin-top: 20px;
+}
+
+#searchForm {
+    padding-top: 10px;
+}
+
+svg {
+    display: block;
+}
+
+.data-buttons {
+    /* float: left; */
+    display: inline-block;
+    vertical-align: top;
+}
+
+.score-explanation {
+    color: #888888;
+    font-size: 12px;
+}
+
+.band-plot {
+    margin-bottom: 5px;
+}
+
+.dropdown {
+    display: inline-block;
+}
+
+.form-check {
+    display: inline-block;
+}
+
+#subs, #structure {
+    display: inline-block;
+}
+
+.ui-autocomplete {
+    max-height: 300px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.tabulator {
+    margin-bottom: 10px;
+    margin-right: 10px;
+    width: min-content;		/*Prevent extra space after columns.*/
+}
+
+/* from
+   https://github.com/Caged/d3-tip/blob/master/examples/example-styles.css
+*/
+.d3-tip {
+  line-height: 1;
+  font-weight: bold;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  border-radius: 2px;
+  pointer-events: none;
+}
+
+/* Creates a small triangle extender for the tooltip */
+.d3-tip:after {
+  box-sizing: border-box;
+  display: inline;
+  font-size: 10px;
+  width: 100%;
+  line-height: 1;
+  color: rgba(0, 0, 0, 0.8);
+  position: absolute;
+  pointer-events: none;
+}
+
+/* Northward tooltips */
+.d3-tip.n:after {
+  content: "\25BC";
+  margin: -1px 0 0 0;
+  top: 100%;
+  left: 0;
+  text-align: center;
+}
+/* END
+   https://github.com/Caged/d3-tip/blob/master/examples/example-styles.css
+*/

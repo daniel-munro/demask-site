@@ -1,0 +1,23 @@
+Dataset	Study	PMID	Protein	Species	Positions mutated
+bloom2014	Bloom 2014	24859245	NP	influenza (A/WSN/1933)	498
+brenan2016	Brenan et al. 2016	27760319	MAPK1/ERK2	human	359
+doud2016	Doud and Bloom 2016	27271655	H1 HA	influenza (A/WSN/1933)	564
+firnberg2014	Firnberg et al. 2014	24567513	TEM-1	E. coli	286
+giacomelli2018	Giacomelli et al. 2018	30224644	TP53	human	393
+haddox2018f	Haddox et al. 2018	29590010	Env	HIV (BF520)	662
+haddox2018g	Haddox et al. 2018	29590010	Env	HIV (BG505)	670
+heredia2018c	Heredia et al. 2018	29678950	CCR5	human	351
+heredia2018x	Heredia et al. 2018	29678950	CXCR4	human	351
+kelsic2016	Kelsic et al. 2016	28009265	IF1	E. coli	72
+klesmith2015	Klesmith et al. 2015	26369947	LGK	Lipomyces starkeyi (Oleaginous yeast)	439
+mavor2016	Mavor et al. 2016	27111525	RL401	yeast	75
+melnikov2014	Melnikov et al. 2014	24914046	APH(3')II	E. coli	264
+roscoe2013	Roscoe et al. 2013	23376099	RL401	yeast	75
+roscoe2014	Roscoe and Bolon 2014	24862281	RL401	yeast	75
+stiffler2015	Stiffler et al. 2015	25723163	TEM-1	E. coli	263
+thyagarajan2014	Thyagarajan and Bloom 2014	25006036	H1 HA	influenza	564
+weile2017c	Weile et al. 2017	29269382	CALM1	human	149
+weile2017s	Weile et al. 2017	29269382	SUMO1	human	101
+weile2017t	Weile et al. 2017	29269382	TPK1	human	243
+weile2017u	Weile et al. 2017	29269382	UBE2I	human	159
+wrenbeck2017	Wrenbeck et al. 2017	28585537	amiE	P. aeruginosa	341

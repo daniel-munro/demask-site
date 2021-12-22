@@ -1,0 +1,119 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Predictions | DeMaSk</title>
+    <meta name="description" content="Visualization of protein variant impact">
+    <meta name="viewport" content="width=device-width">
+    <!-- Open Graph -->
+    <meta property="og:url" content="https://demask.princeton.edu/view">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="DeMaSk: protein substitution impact prediction">
+    <meta property="og:description"  content="DeMaSk uses a simple linear model to predict the functional impact of single amino acid substitutions. It uses an interpretable, directional amino acid substitution matrix computed from deep mutational scanning datasets, as well as per-position evolutionary conservation and variant frequency computed from homologs of the query sequence.">
+    <meta property="og:image" content="https://demask.princeton.edu/images/DeMaSk_preview.png">
+    <meta name="twitter:card" content="summary">
+    <!-- end Open Graph -->
+    <!-- begin favicons -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+    <!-- end favicons -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/scripts/jquery-ui.css">
+    <link rel="stylesheet" href="/css/main.css">
+  </head>
+  <body>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="/"><img src="/images/DeMaSk.png" alt="DeMaSk" width="110px"></a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse"
+	  data-target="#navbarSupportedContent"
+	  aria-controls="navbarSupportedContent" aria-expanded="false"
+	  aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item">
+	      <a class="nav-link" href="/query">Query</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="https://github.com/Singh-Lab/DeMaSk">Software</a>
+      </li>
+      <li class="nav-item">
+	      <a class="nav-link" href="/about">About</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<div id="status" class="container-fluid"></div>
+
+<div class="results container-fluid" style="display: none;">
+    
+  <h3>Fitness impact predictions</h3>
+
+  <a class="btn btn-primary" id="download" type="button">Download scores</a>
+  <a class="btn btn-outline-secondary" id="download-pos-rank" type="button">Position rankings</a>
+  <a class="btn btn-outline-secondary" id="download-alignment" type="button">Alignment</a>
+  <span>(query + <span id="n-homologs"></span> homologs)</span>
+  <p>Save this page's URL to access these results again (available for at least 30 days).</p>
+
+  <div>
+    <svg id="zoom" width="1200" height="100"></svg>
+  </div>
+
+  <div>
+    <svg id="map" width="1200" height="230"></svg>
+  </div>
+
+  <div style="display: inline-block;">
+    <svg id="colorscale" width="350" height="50"></svg>
+  </div>
+
+  <div class="data-buttons">
+    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+      <label class="btn btn-primary active" onclick="viewData('score')">
+        <input type="radio" name="viewData" id="viewScore" autocomplete="off" checked> Δ Fitness
+      </label>
+      <label class="btn btn-secondary" onclick="viewData('entropy')">
+        <input type="radio" name="viewData" id="viewEntropy" autocomplete="off"> Entropy
+      </label>
+      <label class="btn btn-secondary" onclick="viewData('log2f_var')">
+        <input type="radio" name="viewData" id="viewVarFreq" autocomplete="off"> Variant frequency
+      </label>
+      <label class="btn btn-secondary" onclick="viewData('matrix')">
+        <input type="radio" name="viewData" id="viewMatrix" autocomplete="off"> DMS-fit matrix
+      </label>
+    </div>
+  </div>
+  
+  <div class="score-explanation">
+    <em>Substitutions that are predicted to lower the protein's
+     function have negative scores.  Those predicted to increase the
+     protein's function have positive scores.  The lowest present
+     score generally corresponds to complete loss of function.</em>
+  </div>
+
+</div>
+
+<!-- <script src="https://d3js.org/d3.v5.min.js"></script> -->
+<script src="/scripts/d3.js"></script>
+<script src="/scripts/d3-tip.js"></script>
+
+<!-- Three scripts below for bootstrap -->
+<!-- <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script> -->
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script> -->
+<!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script> -->
+<!-- <script src="node_modules/jquery/dist/jquery.slim.min.js"></script> -->
+<!-- Using non-slim jQuery for post(): -->
+<script src="/scripts/jquery.min.js"></script>
+<script src="/scripts/popper.min.js"></script>
+<script src="/scripts/bootstrap.min.js"></script>
+
+<script src="/scripts/jquery-ui.js"></script>
+
+<script src="/scripts/view.js"></script>
+  </body>
+</html>
