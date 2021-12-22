@@ -1,3 +1,5 @@
+"""Read DeMaSk output table of all variants and return a per-position summary table."""
+
 import numpy as np
 import sys
 

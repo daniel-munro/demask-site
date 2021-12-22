@@ -1,18 +1,18 @@
+"""Flask server to receive protein sequences, track DeMaSk jobs, and cache and return results"""
+
 from flask import Flask, request, send_from_directory
 from flask_restful import Resource, Api, reqparse, inputs
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate
+# from flask_migrate import Migrate
 import hashlib
 import subprocess
 
 
 def process_fasta(fasta):
+    """Accept fasta or plain sequence and return fasta, sequence hash, and sequence"""
     lines = fasta.splitlines()
     lines = [line for line in lines if line != '']
-    # assert lines[0][0] == '>'
-    # if lines[0][0] != '>':
-    #     lines.insert(0, '>seq')
     if lines[0][0] == '>':
         lines = lines[1:]
     if any([line[0] == '>' for line in lines]):
@@ -25,17 +25,20 @@ def process_fasta(fasta):
     return fasta, sha1, seq
 
 
+DATADIR = '/Genomics/demask/data'
+# DATADIR = '../../data'
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///demask.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DATADIR}/demask.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
-migrate = Migrate(app, db)
-CORS(app, origin='localhost')
+# migrate = Migrate(app, db)
+CORS(app, origin='localhost') # API requests are forwarded to port 5000, which Flask listens to
 api = Api(app, prefix='/api')
 version = 3       # Increment when DeMaSk update would change results.
 
 
 class Scoreset(db.Model):
+    """Metadata for each submitted protein sequence"""
     sha1 = db.Column(db.String(20), primary_key=True)
     version = db.Column(db.Integer, nullable=False)
     submitted_at = db.Column(db.DateTime, default=db.func.now(),
@@ -54,6 +57,7 @@ class Scoreset(db.Model):
 
 
 class JobCollectionResource(Resource):
+    """Run a new job for a submitted protein sequence"""
     def post(self):
         fasta = request.form.get('seq').upper()
         fasta, ID, seq = process_fasta(fasta)
@@ -65,10 +69,9 @@ class JobCollectionResource(Resource):
             scoreset = Scoreset(sha1=ID, version=version)
             db.session.add(scoreset)
             db.session.commit()
-            open('./working/' + ID + '.fa', 'w').write(fasta)
-            out = open('status/' + ID + '.txt', 'w')
-            subprocess.Popen(['bash', 'demask_server.sh', ID],
-                             stdout=out, stderr=out)
+            open(f'{DATADIR}/working/{ID}.fa', 'w').write(fasta)
+            out = open(f'{DATADIR}/status/{ID}.txt', 'w')
+            subprocess.Popen(['bash', 'run_job.sh', ID], stdout=out, stderr=out)
         resp = {}
         resp['id'] = scoreset.sha1
         resp['ready'] = scoreset.ready
@@ -76,13 +79,14 @@ class JobCollectionResource(Resource):
 
 
 class JobResource(Resource):
+    """Get the status of a submitted job"""
     def get(self, ID):
         scoreset = Scoreset.query.filter_by(sha1=ID).first()
         assert scoreset is not None
         resp = {}
         resp['ready'] = scoreset.ready
         if scoreset.error:
-            message = open('./status/' + ID + '.txt', 'r').read()
+            message = open(f'{DATADIR}/status/{ID}.txt', 'r').read()
             resp['status'] = 'Error:\n' + message
         elif scoreset.ready:
             resp['status'] = 'Finished. Redirecting to results...'
@@ -90,35 +94,38 @@ class JobResource(Resource):
         elif scoreset.homologs:
             resp['status'] = 'Computing scores...'
         else:
-            resp['status'] = 'Searching for homologs...'
+            resp['status'] = 'Searching for homologs (this should take 7-10 minutes)...'
         return resp
 
 
 class ScoresetResource(Resource):
+    """Return prediction scores for a protein"""
     def get(self, ID):
         parser = reqparse.RequestParser()
         parser.add_argument('download', type=inputs.boolean, default=False,
                             help='Include to send as downloadable attachment.')
         args = parser.parse_args()
-        return send_from_directory('./results/', ID + '.txt', as_attachment=args['download'])
+        return send_from_directory(f'{DATADIR}/results/{ID}.txt', as_attachment=args['download'])
 
 
 class AlignmentResource(Resource):
+    """Return the aligned homologs for a protein"""
     def get(self, ID):
         parser = reqparse.RequestParser()
         parser.add_argument('download', type=inputs.boolean, default=False,
                             help='Include to send as downloadable attachment.')
         args = parser.parse_args()
-        return send_from_directory('./working/', ID + '.a2m', as_attachment=args['download'])
+        return send_from_directory(f'{DATADIR}/working/{ID}.a2m', as_attachment=args['download'])
 
 
 class PosRankResource(Resource):
+    """Return the summary table of ranked protein positions"""
     def get(self, ID):
         parser = reqparse.RequestParser()
         parser.add_argument('download', type=inputs.boolean, default=False,
                             help='Include to send as downloadable attachment.')
         args = parser.parse_args()
-        return send_from_directory('./pos_rank/', ID + '.pos_rank.txt', as_attachment=args['download'])
+        return send_from_directory(f'{DATADIR}/pos_rank/{ID}.pos_rank.txt', as_attachment=args['download'])
 
 
 api.add_resource(JobCollectionResource, '/jobs')
@@ -132,7 +139,7 @@ api.add_resource(PosRankResource, '/pos_rank/<ID>')
 def create_db():
     """Create a new database file."""
     db.create_all()
-    print('Now call "flask db init" to initiate migrations.')
+    # print('Now call "flask db init" to initiate migrations.')
 
 # To migrate: flask db migrate, then if it looks OK, flask db upgrade.
 
