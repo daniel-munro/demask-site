@@ -105,7 +105,7 @@ class ScoresetResource(Resource):
         parser.add_argument('download', type=inputs.boolean, default=False,
                             help='Include to send as downloadable attachment.')
         args = parser.parse_args()
-        return send_from_directory(f'{DATADIR}/results/{ID}.txt', as_attachment=args['download'])
+        return send_from_directory(f'{DATADIR}/results', f'{ID}.txt', as_attachment=args['download'])
 
 
 class AlignmentResource(Resource):
@@ -115,7 +115,7 @@ class AlignmentResource(Resource):
         parser.add_argument('download', type=inputs.boolean, default=False,
                             help='Include to send as downloadable attachment.')
         args = parser.parse_args()
-        return send_from_directory(f'{DATADIR}/working/{ID}.a2m', as_attachment=args['download'])
+        return send_from_directory(f'{DATADIR}/working', f'{ID}.a2m', as_attachment=args['download'])
 
 
 class PosRankResource(Resource):
@@ -125,7 +125,7 @@ class PosRankResource(Resource):
         parser.add_argument('download', type=inputs.boolean, default=False,
                             help='Include to send as downloadable attachment.')
         args = parser.parse_args()
-        return send_from_directory(f'{DATADIR}/pos_rank/{ID}.pos_rank.txt', as_attachment=args['download'])
+        return send_from_directory(f'{DATADIR}/pos_rank', f'{ID}.pos_rank.txt', as_attachment=args['download'])
 
 
 api.add_resource(JobCollectionResource, '/jobs')
