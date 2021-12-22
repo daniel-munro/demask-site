@@ -10,7 +10,7 @@ DBFILE="/Genomics/demask/data/demask.db"
 
 if [ $? -eq 0 ]
 then
-    HITS=$(($(grep -c "^>" /Genomics/demask/data/working/$ID.a2m)-1))
+    HITS=$(($(grep -c "^>" $ALNFILE)-1))
     sqlite3 $DBFILE "UPDATE Scoreset SET homologs=1 WHERE sha1='$ID'"
     sqlite3 $DBFILE "UPDATE Scoreset SET n_homologs=$HITS WHERE sha1='$ID'"
     rm $BLASTFILE

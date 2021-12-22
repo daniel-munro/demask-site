@@ -4,6 +4,8 @@ This is the code for [demask.princeton.edu](https://demask.princeton.edu), a web
 
 It accepts a protein sequence. The backend is managed by a [Flask](https://flask.palletsprojects.com/en/2.0.x/) server, which receives a protein sequence and runs DeMaSk. It stores information on each job in a SQLite table. When DeMaSk is finished, it returns results, which the frontend visualizes using [D3.js](https://d3js.org/). Jobs are indexed by a hash of the protein sequence and the results are cached. So if the same protein is submitted again, the results are returned instantly and DeMaSk will not be re-run.
 
+The flask API is run using [Gunicorn](https://gunicorn.org/), which is controlled using [Circus](https://circus.readthedocs.io/en/latest/). These are installed in a user-writable directory, along with python3 and any required packages.
+
 ## Requirements
 
 Python3 packages:
@@ -22,4 +24,4 @@ To update the web server:
 2. Pull updates, if any, from this repository.
 3. Pull updates, if any, from the [DeMaSk package repository](https://github.com/Singh-Lab/DeMaSk).
 4. Delete old data if instructed to.
-5. /Genomics/demask/local/bin/circusctl restart demask
+5. `./local/bin/circusctl restart demask`
