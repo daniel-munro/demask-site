@@ -1,6 +1,6 @@
 DB=/Genomics/demask/data/demask.db
-STATS=/var/www/demask/api/stats.txt
-STATS_DB=/var/www/demask/api/stats_db.txt
+STATS=/var/www/demask/stats.txt
+STATS_DB=/var/www/demask/stats_db.txt
 
 # Start entry with the date
 date >> $STATS
