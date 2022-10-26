@@ -1,5 +1,6 @@
 """Flask server to receive protein sequences, track DeMaSk jobs, and cache and return results"""
 
+from datetime import datetime, timedelta, timezone
 from flask import Flask, request, send_from_directory
 from flask_restful import Resource, Api, reqparse, inputs
 from flask_cors import CORS
@@ -62,8 +63,9 @@ class JobCollectionResource(Resource):
         fasta = request.form.get('seq').upper()
         fasta, ID, seq = process_fasta(fasta)
         scoreset = Scoreset.query.filter_by(sha1=ID).first()
-        if not scoreset or scoreset.error:
-            if scoreset and scoreset.error:
+        if not scoreset or scoreset.error or ((not scoreset.ready) and scoreset.submitted_at < datetime.utcnow() - timedelta(minutes=30)):
+            # Rerun if error or if older than 30 minutes and still hasn't completed:
+            if scoreset and (scoreset.error or ((not scoreset.ready) and scoreset.submitted_at < datetime.utcnow() - timedelta(minutes=30))):
                 db.session.delete(scoreset)  # Try running it again.
                 db.session.commit()
             scoreset = Scoreset(sha1=ID, version=version)
@@ -94,7 +96,7 @@ class JobResource(Resource):
         elif scoreset.homologs:
             resp['status'] = 'Computing scores...'
         else:
-            resp['status'] = 'Searching for homologs (this should take 7-10 minutes)...'
+            resp['status'] = 'Searching for homologs (this should take 7-10 minutes, if it takes more than 30 minutes try resubmitting)...'
         return resp
 
 
