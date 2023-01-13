@@ -2,7 +2,7 @@ function submit() {
     $("#submit").prop("disabled", true);
     var seq = $("#protSeq").val();
     jQuery.post(
-	"/api/jobs",
+	"https://demask.net/api/jobs",
 	{ seq: seq },
 	function(data) {
 	    window.location.href = "/view#" + data.id;

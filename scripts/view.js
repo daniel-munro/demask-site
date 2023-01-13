@@ -326,7 +326,7 @@ function WT_AAs(data) {
 }
 
 function getVarDataDrawPlot(id) {
-	d3.tsv("/api/scoresets/" + id, function(d) {
+	d3.tsv("https://demask.net/api/scoresets/" + id, function(d) {
 		d.pos = +d.pos;
 		d.score = +d.score;
 		d.entropy = +d.entropy;
@@ -378,14 +378,14 @@ function symExtent(data, fun) {
 }
 
 function setDownload(id) {
-	$("#download").attr("href", "/api/scoresets/" + id + "?download=true");
-	$("#download-alignment").attr("href", "/api/alignments/" + id + "?download=true");
-	$("#download-pos-rank").attr("href", "/api/pos_rank/" + id + "?download=true");
+	$("#download").attr("href", "https://demask.net/api/scoresets/" + id + "?download=true");
+	$("#download-alignment").attr("href", "https://demask.net/api/alignments/" + id + "?download=true");
+	$("#download-pos-rank").attr("href", "https://demask.net/api/pos_rank/" + id + "?download=true");
 }
 
 function check() {
 	jQuery.get(
-		"/api/jobs/" + id,
+		"https://demask.net/api/jobs/" + id,
 		function(data) {
 			if (data.ready) {
 				clearInterval(checker);

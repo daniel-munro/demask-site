@@ -26,14 +26,16 @@ def process_fasta(fasta):
     return fasta, sha1, seq
 
 
-DATADIR = '/Genomics/demask/data'
+# DATADIR = '/Genomics/demask/data'
+DATADIR = '/root/demask/data'
 # DATADIR = '../../data'
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DATADIR}/demask.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 # migrate = Migrate(app, db)
-CORS(app, origin='localhost') # API requests are forwarded to port 5000, which Flask listens to
+# CORS(app, origin='localhost') # API requests are forwarded to port 5000, which Flask listens to
+CORS(app, origins=['https://demask.princeton.edu', 'http://localhost'])
 api = Api(app, prefix='/api')
 version = 3       # Increment when DeMaSk update would change results.
 
