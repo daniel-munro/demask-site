@@ -106,7 +106,7 @@ class ScoresetResource(Resource):
     """Return prediction scores for a protein"""
     def get(self, ID):
         parser = reqparse.RequestParser()
-        parser.add_argument('download', type=inputs.boolean, default=False,
+        parser.add_argument('download', type=inputs.boolean, default=False, location='args',
                             help='Include to send as downloadable attachment.')
         args = parser.parse_args()
         return send_from_directory(f'{DATADIR}/results', f'{ID}.txt', as_attachment=args['download'])
@@ -116,7 +116,7 @@ class AlignmentResource(Resource):
     """Return the aligned homologs for a protein"""
     def get(self, ID):
         parser = reqparse.RequestParser()
-        parser.add_argument('download', type=inputs.boolean, default=False,
+        parser.add_argument('download', type=inputs.boolean, default=False, location='args',
                             help='Include to send as downloadable attachment.')
         args = parser.parse_args()
         return send_from_directory(f'{DATADIR}/working', f'{ID}.a2m', as_attachment=args['download'])
@@ -126,7 +126,7 @@ class PosRankResource(Resource):
     """Return the summary table of ranked protein positions"""
     def get(self, ID):
         parser = reqparse.RequestParser()
-        parser.add_argument('download', type=inputs.boolean, default=False,
+        parser.add_argument('download', type=inputs.boolean, default=False, location='args',
                             help='Include to send as downloadable attachment.')
         args = parser.parse_args()
         return send_from_directory(f'{DATADIR}/pos_rank', f'{ID}.pos_rank.txt', as_attachment=args['download'])
@@ -161,4 +161,4 @@ def empty_db():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, port=8000)

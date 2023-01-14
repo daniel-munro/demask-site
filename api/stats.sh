@@ -1,4 +1,5 @@
-DB=/Genomics/demask/data/demask.db
+# DB=/Genomics/demask/data/demask.db
+DB=/root/demask/data/demask.db
 STATS=/var/www/demask/stats.txt
 STATS_DB=/var/www/demask/stats_db.txt
 
